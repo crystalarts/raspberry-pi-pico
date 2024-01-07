@@ -1,43 +1,39 @@
 import machine
-from machine import Pin
 import network
+import utime
 
-led = Pin("LED", Pin.OUT)
+ssid = "name"
+password = "password"
 
-ssid = "podaj nazwę sieci"
-password = "podaj hasło sieci"
+print("┏╋━━━━━━━ ◥◣ ◆ ◢◤ ━━━━━━━╋┓")
+print("  \033[94;1mWi-Fi connection and range strength\033[0m")
+print("           \033[94;1mRaspberry Pi Pico\033[0m")
+print("┗╋━━━━━━━ ◥◣ ◆ ◢◤ ━━━━━━━╋┛")
 
 wlan = network.WLAN(network.STA_IF)
 wlan.active(True)
 if not wlan.isconnected():
     wlan.connect(ssid, password)
     while wlan.isconnected() == False:
-        print('Oczekiwanie na połączenie...')
+        print('\033[95m[I]\033[0m \033[91mWaiting for connection...\033[0m')
         utime.sleep(5)
 ip = wlan.ifconfig()[0]
-print(f'Połączono z WiFi: {ip}')
-led.on()
 
 wifi_strength = wlan.status("rssi")
 mapped_strength = int((wifi_strength + 100) * 4 / 60)
 
 strength = ""
 if mapped_strength == 1:
-    strength = "      Siła zasięgu : | (1 kreska)"
+    strength = "Wi-Fi coverage strength \033[91m:\033[0m \033[93m1 line"
 if mapped_strength == 2:
-    strength = "     Siła zasięgu : || (2 kreski)"
+    strength = "Wi-Fi coverage strength \033[91m:\033[0m \033[93m2 lines"
 if mapped_strength == 3:
-    strength = "     Siła zasięgu : ||| (3 kreski)"
+    strength = "Wi-Fi coverage strength \033[91m:\033[0m \033[93m3 lines"
 if mapped_strength == 4:
-    strength = "     Siła zasięgu : |||| (4 kreski)"
+    strength = "Wi-Fi coverage strength \033[91m:\033[0m \033[93m4 lines"
 
 print("")
-print("")
-print("")
-print("    Połączenie wifi i siła zasięgu")
-print("         Raspberry Pi Pico WH")
-print("--------------------------------------")
-print(f"    Połączono z siecią : {ssid}")
-print(f"       Adres IP : {ip}")
-print(strength)
+print(f"\033[95m[I]\033[0m \033[91m»\033[0m Connected to the network \033[91m:\033[0m \033[93m{ssid}")
+print(f"\033[95m[I]\033[0m \033[91m»\033[0m IP address obtained \033[91m:\033[0m \033[93m{ip}")
+print("\033[95m[I]\033[0m \033[91m»\033[0m", strength)
 print("")
